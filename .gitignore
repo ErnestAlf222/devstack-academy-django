@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+*.log
+local_settings.py
+media/
+staticfiles/
+static_root/
+
+# Secrets / sensitive
+.env
+.env.*
+*.pem
+*.key
+*.crt
+secrets.json
+credentials.json
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.claude/
