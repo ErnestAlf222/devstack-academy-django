@@ -5,148 +5,58 @@
 
 {% block title %} Todos los cursos {% endblock title %}
 
-{% block custom_styles %} 
-<link rel="stylesheet" href="{%static 'css/styles.css' %}">
+{% block custom_styles %}
+<link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
 {% endblock custom_styles %}
-    
+
 
 
 {% block content %}
-    <div class="layout">
+    <div class="layout flex h-screen bg-bg font-sans text-ink antialiased">
 
-        <div class="sidebar">
-            <div class="logo">
-                <img src="./images/devilearn.png" alt="Logo">
-            </div>
-            <ul class="menu">
-                <li><a class="menu-option" href="index.html"><i
-                            class="fa-solid fa-house icon"></i><span>Dashboard</span></a>
-                </li>
-                <li><a class="menu-option" href="courses.html"><i
-                            class="fa-solid fa-chalkboard-user icon"></i><span>Cursos</span></a></li>
-
-
-            </ul>
-            <ul class="bottom-menu">
-                <li><a class="menu-option" href="#"><i class="fa-solid fa-question icon"></i><span>Soporte</span></a>
-                </li>
-                <li><a class="menu-option" href="#"><i class="fa-solid fa-gear icon"></i><span>Configuración</span></a>
-                </li>
-            </ul>
-        </div>
+        {% include 'includes/sidebar.html' %}
 
 
         <!-- Main content -->
-        <div class="main-content">
+        <div class="main-content flex min-w-0 flex-1 flex-col overflow-y-auto bg-bg bg-glow">
             <!-- Header -->
-            <div class="header">
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass icon"></i>
-                    <input type="text" placeholder="Buscar..." />
-                </div>
-                <div class="header-right">
-                    <div class="avatar">
-                        <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="User" />
-                    </div>
-                </div>
-            </div>
+            {% include 'includes/header.html' %}
+            
             <!-- Aquí va el contenido de la página -->
-            <main>
+            <main class="flex-1 px-4 py-8 md:px-10">
                 <!-- === COURSE CARDS === -->
 
-                <div class="carousel-wrapper">
+                <div class="carousel-wrapper -mx-4 snap-x snap-mandatory overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:overflow-visible md:px-0 md:pb-0">
                     <div class="course-grid">
-                        <div class="course-grid">
-                            <!-- Card 1 -->
-                            <div class="course-card">
-                                <a href="course_detail.html">
-                                    <img src="./images/curso_1.jpg" alt="Course Image" class="course-img" />
-                                    <div class="course-info">
-                                        <div class="course-rating">
-                                            <span class="tag beginner">Beginner</span>
-                                            <div class="course-meta">
-                                                <span><i class="fa-solid fa-star"></i> 5.0</span>
+                        <div class="course-grid flex w-max gap-4 md:grid md:w-auto md:grid-cols-[repeat(auto-fill,minmax(290px,1fr))] md:gap-8">
+                            
+
+                            
+                            {% for course in courses %}
+                                <div class="course-card group relative w-[min(82vw,300px)] shrink-0 snap-center overflow-hidden rounded-[18px] border border-accent/15 bg-gradient-to-br from-surface2 to-surface shadow-card transition duration-300 ease-smooth animate-rise [animation-delay:.05s] motion-reduce:animate-none hover:-translate-y-2 hover:border-accent/55 hover:shadow-card-hover focus-within:-translate-y-2 focus-within:border-accent/55 focus-within:shadow-card-hover md:w-auto">
+                                    <a class="flex h-full flex-col rounded-[18px] text-ink no-underline outline-none before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:z-10 before:h-[190px] before:bg-gradient-to-b before:from-transparent before:from-55% before:to-surface/90 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent" href="{% url 'course_detail'%}">
+                                        <img src="{% static course.course_image%} " alt="Course Image" class="course-img h-[190px] w-full object-cover transition duration-700 ease-smooth group-hover:scale-110 motion-reduce:transition-none" />
+                                        <div class="course-info flex flex-1 flex-col gap-1.5 px-5 pb-5 pt-4">
+                                            <div class="course-rating flex items-center justify-between pb-1">
+                                                <span class="tag beginner inline-block rounded-full border border-emerald-300/40 bg-emerald-300/15 px-3 py-1 text-[.72rem] font-bold uppercase tracking-wider text-emerald-200">{{course.level}}</span>
+                                                <div class="course-meta text-sm font-semibold text-ink">
+                                                    <span><i class="fa-solid fa-star text-star drop-shadow-[0_0_4px_rgba(245,196,81,.45)]"></i> {{course.rating}}</span>
+                                                </div>
                                             </div>
+
+                                            <h3 class="course-title mb-2.5 line-clamp-3 text-[1.08rem] font-bold leading-snug text-ink transition-colors group-hover:text-accent">
+                                                {{course.course_title}}
+                                            </h3>
+                                            <div class="author mt-auto flex items-center gap-3 border-t border-accent/15 pt-3.5"><img class="h-[38px] w-[38px] rounded-full border-2 border-accent bg-deep object-cover transition duration-300 ease-smooth group-hover:-rotate-6 group-hover:scale-110" src="{{course.instructor_image}}"
+                                                    alt=""><span class="text-sm font-medium text-muted">{{course.instructor}}</span></div>
                                         </div>
 
-                                        <h3 class="course-title">Three-month Course to Learn the Basics of Python and
-                                            Start
-                                            Coding.
-                                        </h3>
-                                        <div class="author"><img src="https://randomuser.me/api/portraits/women/68.jpg"
-                                                alt=""><span>Alison Walsh</span></div>
-                                    </div>
-
-                                </a>
-                            </div>
-
-                            <!-- Card 2 -->
-                            <div class="course-card">
-                                <a href="course_detail.html">
-                                    <img src="./images/curso_2.jpg" alt="Course Image" class="course-img" />
-                                    <div class="course-info">
-                                        <div class="course-rating">
-                                            <span class="tag beginner">Beginner</span>
-                                            <div class="course-meta">
-                                                <span><i class="fa-solid fa-star"></i> 5.0</span>
-                                            </div>
-                                        </div>
-                                        <h3 class="course-title">Beginner's Guide to Successful Company Management:
-                                            Business
-                                            And
-                                            More</h3>
-                                        <div class="author"><img src="https://randomuser.me/api/portraits/women/20.jpg"
-                                                alt=""><span>Patty Kutch</span></div>
-                                    </div>
-
-                                </a>
-                            </div>
-
-                            <!-- Card 3 -->
-                            <div class="course-card">
-                                <a href="course_detail.html">
-                                    <img src="./images/curso_3.jpg" alt="Course Image" class="course-img" />
-                                    <div class="course-info">
-                                        <div class="course-rating">
-                                            <span class="tag beginner">Beginner</span>
-                                            <div class="course-meta">
-                                                <span><i class="fa-solid fa-star"></i> 5.0</span>
-                                            </div>
-                                        </div>
-                                        <h3 class="course-title">A Fascinating Theory of Probability. Practice.
-                                            Application.
-                                            How to
-                                            Outplay...</h3>
-                                        <div class="author"><img src="https://randomuser.me/api/portraits/men/32.jpg"
-                                                alt=""><span>Alonzo Murray</span></div>
-
-
-                                    </div>
-
-                                </a>
-                            </div>
-
-                            <!-- Card 4 -->
-                            <div class="course-card">
-                                <a href="course_detail.html">
-                                    <img src="./images/curso_4.jpg" alt="Course Image" class="course-img" />
-                                    <div class="course-info">
-                                        <div class="course-rating">
-                                            <span class="tag beginner">Beginner</span>
-                                            <div class="course-meta">
-                                                <span><i class="fa-solid fa-star"></i> 5.0</span>
-                                            </div>
-                                        </div>
-                                        <h3 class="course-title">Introduction: Machine Learning and LLM. Implementation
-                                            in
-                                            Modern
-                                            Software</h3>
-                                        <div class="author"><img src="https://randomuser.me/api/portraits/men/45.jpg"
-                                                alt=""><span>Gregory Harris</span></div>
-                                    </div>
-
-                                </a>
-                            </div>
+                                    </a>
+                                </div>
+                                
+                            {% endfor %}
+                                
+                          
                         </div>
                     </div>
                 </div>
@@ -154,9 +64,13 @@
             </main>
         </div>
     </div>
-    <script src="./js/script.js"></script>
-    
+
+
 {% endblock content %}
-    
 
 
+
+{% block scripts %}
+<script src="{%static 'js/script.js'%}"></script>
+
+{% endblock scripts %}

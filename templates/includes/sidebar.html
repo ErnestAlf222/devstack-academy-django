@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="sidebar group/side flex w-14 shrink-0 flex-col justify-between overflow-hidden border-r border-accent/15 bg-side-fade py-4 transition-[width] duration-300 ease-smooth hover:w-48 focus-within:w-48">
+            <div>
+                <div class="logo mb-8 px-4">
+                    <img class="h-[35px] w-[170px] max-w-none" src="{%static 'images/devilearn.png' %}" alt="Logo">
+                </div>
+                <ul class="menu">
+                    <li><a class="menu-option flex items-center gap-4 border-l-[3px] border-transparent px-[13px] py-4 text-muted outline-none transition hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:border-accent focus-visible:bg-accent/10 focus-visible:text-ink" href="index.html"><i
+                                class="fa-solid fa-house icon w-5 text-center text-xl"></i><span class="hidden whitespace-nowrap group-hover/side:inline group-focus-within/side:inline">Dashboard</span></a>
+                    </li>
+                    <li><a class="menu-option flex items-center gap-4 border-l-[3px] border-transparent px-[13px] py-4 text-muted outline-none transition hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:border-accent focus-visible:bg-accent/10 focus-visible:text-ink" href="courses.html"><i
+                                class="fa-solid fa-chalkboard-user icon w-5 text-center text-xl"></i><span class="hidden whitespace-nowrap group-hover/side:inline group-focus-within/side:inline">Cursos</span></a></li>
+
+
+                </ul>
+            </div>
+            <ul class="bottom-menu">
+                <li><a class="menu-option flex items-center gap-4 border-l-[3px] border-transparent px-[13px] py-4 text-muted outline-none transition hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:border-accent focus-visible:bg-accent/10 focus-visible:text-ink" href="#"><i class="fa-solid fa-question icon w-5 text-center text-xl"></i><span class="hidden whitespace-nowrap group-hover/side:inline group-focus-within/side:inline">Soporte</span></a>
+                </li>
+                <li><a class="menu-option flex items-center gap-4 border-l-[3px] border-transparent px-[13px] py-4 text-muted outline-none transition hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:border-accent focus-visible:bg-accent/10 focus-visible:text-ink" href="#"><i class="fa-solid fa-gear icon w-5 text-center text-xl"></i><span class="hidden whitespace-nowrap group-hover/side:inline group-focus-within/side:inline">Configuración</span></a>
+                </li>
+            </ul>
+</div>
