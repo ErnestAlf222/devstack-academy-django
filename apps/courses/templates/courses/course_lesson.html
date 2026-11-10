@@ -1,82 +1,87 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends 'base.html' %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curso Django</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+{% block title %} Lecciones {% endblock title %}
 
-    <link rel="stylesheet" href="./css/lessons.css">
-</head>
 
-<body>
+{% block custom_styles %}
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}?v=3">
+{% endblock custom_styles %}
+
+
+{% block content %}
     <!-- HEADER SUPERIOR -->
-    <header class="topbar">
-        <div class="acciones">
-            <div class="back-link"> <button class="discusiones">← Ve al panel de control</button></div>
+    <header class="topbar flex h-[68px] items-center justify-between gap-3 border-b border-accent/15 bg-bg px-3 font-sans text-ink antialiased md:px-10">
+        <div class="acciones min-w-0">
+            <div class="back-link"> <button class="discusiones cursor-pointer whitespace-nowrap rounded-full border border-accent/30 bg-transparent px-3 py-1.5 text-xs text-muted sm:px-4 sm:py-2 sm:text-sm outline-none transition duration-300 ease-smooth hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:ring-2 focus-visible:ring-accent">← Ve al panel de control</button></div>
 
         </div>
-        <div class="logo"><img src="./images/devilearn.png" alt="Logo devilearn"></div>
+        <div class="logo shrink-0"><img class="h-7 w-auto max-w-none sm:h-8" src="{% static 'images/devilearn.png' %}" alt="Logo devilearn"></div>
     </header>
 
+
     <!-- LAYOUT PRINCIPAL -->
-    <div class="layout">
+    <div class="layout flex min-h-[calc(100vh-68px)] flex-col overflow-x-hidden bg-bg font-sans text-ink antialiased lg:h-[calc(100vh-68px)] lg:flex-row lg:overflow-hidden">
         <!-- SIDEBAR IZQUIERDA -->
-        <aside class="sidebar">
+        <aside class="sidebar min-w-0 max-w-full border-b border-accent/15 bg-side-fade p-6 lg:w-[340px] lg:flex-none lg:shrink-0 lg:overflow-y-auto lg:border-b-0 lg:border-r">
 
 
-            <h1 class="course-title">Django: Crea aplicaciones web robustas con Python</h1>
-            <p class="progress">0% completado</p>
+            <h1 class="course-title mb-2 text-xl font-bold leading-snug text-ink">{{lesson.course_title}}</h1>
+            <p class="progress mb-6 text-sm text-muted">{{lesson.course_progess}} % Completado</p>
 
 
-            <input class="lesson-search" placeholder="Buscar...">
+            <input class="lesson-search mb-4 w-full min-w-0 max-w-full rounded-full border border-accent/15 bg-surface px-4 py-2.5 text-[.95rem] text-ink outline-none transition-all duration-300 ease-smooth placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-accent/20" placeholder="Buscar...">
             <option>Buscar por título de lección</option>
             </select>
 
             <!-- SECCIONES -->
-            <div class="accordion">
-                <div class="accordion-item">
-                    <button class="accordion-header">Sección 1: Introducción al curso <span>0 / 6</span></button>
-                    <div class="accordion-content">
-                        <ul>
-                            <li>Bienvenida</li>
-                            <li>¿Qué aprenderás?</li>
-                            <li>Requisitos del curso</li>
-                        </ul>
+            
+            
+            <div class="accordion flex flex-col overflow-hidden rounded-[18px] border border-accent/15 bg-gradient-to-br from-surface2 to-surface px-4 py-1 shadow-card">
+                {% for section in lesson.course_content %}
+                    <div class="accordion-item group/item border-b border-accent/15 last:border-b-0">
+                        <button class="accordion-header flex w-full cursor-pointer items-center justify-between gap-3 border-none bg-transparent px-1 py-4 text-left text-[.95rem] font-medium text-ink outline-none transition-colors hover:text-accent focus-visible:text-accent group-[.active]/item:text-accent">Sección {{section.id}}: {{section.name}} <span class="shrink-0 text-xs text-muted">{{section.complete_lessons}} /{{section.total_lessons}}</span></button>
+                        <div class="accordion-content max-h-0 overflow-hidden px-1 transition-[max-height] duration-300 ease-smooth group-[.active]/item:max-h-[300px]">
+                            <ul class="mb-4 mt-1 list-none space-y-1 pl-2 text-sm text-muted">
+                                
+                                {% for lesson in section.lessons %}
+                                    <li class="rounded-lg px-2 py-2.5 transition-colors duration-200 hover:bg-accent/10 hover:text-ink">{{lesson.name}}</li>
+                                {% endfor %}
+                                    
+                               
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="accordion-item">
-                    <button class="accordion-header">Sección 2: Fundamentos necesarios de Python <span>0 /
-                            27</span></button>
-                    <div class="accordion-content">
-                        <ul>
-                            <li>Variables</li>
-                            <li>Condicionales</li>
-                        </ul>
-                    </div>
-                </div>
+                    
+                {% endfor %}
+               
                 <!-- Agrega más secciones si deseas -->
             </div>
         </aside>
 
         <!-- CONTENIDO PRINCIPAL (VIDEO) -->
-        <main class="main-content">
-            <div class="content-header">Introducción al curso</div>
-            <div class="video-wrapper">
-                <video controls
+        <main class="main-content flex min-w-0 flex-1 flex-col gap-6 px-4 py-8 md:px-10 lg:overflow-y-auto lg:py-6 xl:px-14 animate-rise motion-reduce:animate-none">
+            <div class="content-header text-[1.8rem] font-bold text-ink">Introducción al curso</div>
+            <div class="video-wrapper w-full min-w-0 max-w-full overflow-hidden rounded-[18px] border border-accent/15 bg-gradient-to-br from-surface2 to-surface p-4 shadow-card">
+                <video class="aspect-video w-full rounded-xl bg-bg object-contain lg:max-h-[calc(100vh-290px)]" controls
                     poster="https://placehold.co/800x450?text=Este+curso+est%C3%A1+en+proceso+de+construcci%C3%B3n">
                     <source src="video-demo.mp4" type="video/mp4">
                     Tu navegador no soporta videos.
                 </video>
             </div>
-            <div class="bottom-bar">
-                <button class="btn-complete">COMPLETAR Y CONTINUAR →</button>
+            <div class="bottom-bar flex justify-end">
+                <button class="btn-complete cursor-pointer rounded-[10px] border border-accent/40 bg-deep px-6 py-3 text-sm font-semibold text-ink outline-none transition duration-300 ease-smooth hover:border-accent hover:bg-accent hover:text-deep hover:shadow-card-hover focus-visible:ring-2 focus-visible:ring-accent">COMPLETAR Y CONTINUAR →</button>
             </div>
         </main>
     </div>
+    
+{% endblock content %}
+    
+    
+    
 
-    <script src="./js/multimedia.js"></script>
-</body>
+{% block scripts %}
+    <script src="{% static 'js/multimedia.js' %}"></script>
 
-</html>
+{% endblock scripts %}
+    

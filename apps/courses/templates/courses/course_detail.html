@@ -30,34 +30,24 @@
                     <div class="course-sections min-w-0 w-full lg:flex-1 animate-rise motion-reduce:animate-none">
                         <h2 class="mb-8 text-[1.8rem] font-bold text-ink">Contenido del curso</h2>
                         <div class="accordion flex flex-col gap-1 overflow-hidden rounded-[18px] border border-accent/15 bg-gradient-to-br from-surface2 to-surface px-6 py-3 shadow-card">
-                            <div class="accordion-item group/item border-b border-accent/15 last:border-b-0">
-                                <button class="accordion-header flex w-full cursor-pointer items-center justify-between gap-4 border-none bg-transparent px-1 py-5 text-left text-base font-medium text-ink outline-none transition-colors hover:text-accent focus-visible:text-accent after:text-sm after:text-accent after:transition-transform after:duration-300 after:content-['⌄'] group-[.active]/item:text-accent group-[.active]/item:after:rotate-180">Sección 1: Introducción al curso</button>
-                                <div class="accordion-content max-h-0 overflow-hidden px-1 transition-[max-height] duration-300 ease-smooth group-[.active]/item:max-h-[300px]">
-                                    <ul class="mb-5 mt-1 list-none space-y-1 pl-2 text-[.95rem] text-muted">
-                                        <li class="py-3"><i class="fa-solid fa-video pr-2.5 text-accent"></i>¿Qué aprenderás en este curso?</li>
-                                        <li class="py-3"><i class="fa-solid fa-file pr-2.5 text-accent"></i>Cómo usar la plataforma</li>
-                                    </ul>
+                            
+                            {% for section in course.course_content %}
+                                <div class="accordion-item group/item border-b border-accent/15 last:border-b-0">
+                                    <button class="accordion-header flex w-full cursor-pointer items-center justify-between gap-4 border-none bg-transparent px-1 py-5 text-left text-base font-medium text-ink outline-none transition-colors hover:text-accent focus-visible:text-accent after:text-sm after:text-accent after:transition-transform after:duration-300 after:content-['⌄'] group-[.active]/item:text-accent group-[.active]/item:after:rotate-180">Sección {{section.id}}: {{section.name}}</button>
+                                    <div class="accordion-content max-h-0 overflow-hidden px-1 transition-[max-height] duration-300 ease-smooth group-[.active]/item:max-h-[300px]">
+                                        <ul class="mb-5 mt-1 list-none space-y-1 pl-2 text-[.95rem] text-muted">
+                                            
+                                            {% for lesson in section.lessons %}
+                                                <li class="py-3"><i class="fa-solid {% if lesson.type == 'video' %} fa-video {%else%} fa-file {%endif%} pr-2.5 text-accent"></i>{{lesson.name}}</li>
+                                            
+                                            {% endfor %}
+                                                
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="accordion-item group/item border-b border-accent/15 last:border-b-0">
-                                <button class="accordion-header flex w-full cursor-pointer items-center justify-between gap-4 border-none bg-transparent px-1 py-5 text-left text-base font-medium text-ink outline-none transition-colors hover:text-accent focus-visible:text-accent after:text-sm after:text-accent after:transition-transform after:duration-300 after:content-['⌄'] group-[.active]/item:text-accent group-[.active]/item:after:rotate-180">Sección 2: Fundamentos necesarios de Python</button>
-                                <div class="accordion-content max-h-0 overflow-hidden px-1 transition-[max-height] duration-300 ease-smooth group-[.active]/item:max-h-[300px]">
-                                    <ul class="mb-5 mt-1 list-none space-y-1 pl-2 text-[.95rem] text-muted">
-                                        <li class="py-3">Variables y tipos de datos</li>
-                                        <li class="py-3">Condicionales y bucles</li>
-                                        <li class="py-3">Funciones básicas</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="accordion-item group/item border-b border-accent/15 last:border-b-0">
-                                <button class="accordion-header flex w-full cursor-pointer items-center justify-between gap-4 border-none bg-transparent px-1 py-5 text-left text-base font-medium text-ink outline-none transition-colors hover:text-accent focus-visible:text-accent after:text-sm after:text-accent after:transition-transform after:duration-300 after:content-['⌄'] group-[.active]/item:text-accent group-[.active]/item:after:rotate-180">Sección 3: Introducción a Django</button>
-                                <div class="accordion-content max-h-0 overflow-hidden px-1 transition-[max-height] duration-300 ease-smooth group-[.active]/item:max-h-[300px]">
-                                    <ul class="mb-5 mt-1 list-none space-y-1 pl-2 text-[.95rem] text-muted">
-                                        <li class="py-3">¿Qué es Django?</li>
-                                        <li class="py-3">Primer proyecto con Django</li>
-                                    </ul>
-                                </div>
-                            </div>
+                            
+                            {% endfor %}
+                                
                             <!-- Agrega más secciones similares -->
                         </div>
                     </div>
@@ -66,17 +56,17 @@
                     <div class="course-info-card w-full animate-rise lg:w-[380px] lg:shrink-0 rounded-[18px] border border-accent/15 bg-gradient-to-br from-surface2 to-surface shadow-card transition duration-300 ease-smooth [animation-delay:.1s] motion-reduce:animate-none hover:-translate-y-2 hover:border-accent/55 hover:shadow-card-hover">
                         <div class="card-banner relative">
                             <div class="tag absolute left-2.5 top-2.5 z-10 rounded-full border border-accent/40 bg-deep px-2.5 py-1 text-xs font-semibold text-accent">{devilearn}</div>
-                            <img class="h-[180px] w-full rounded-t-[18px] bg-bg object-contain" src="https://placehold.co/600x200/1e1e1e/ffffff?text=django" alt="Curso Django" />
+                            <img class="h-[180px] w-full rounded-t-[18px] bg-bg object-contain" src="{%static course.course_image %}" alt="Curso Django" />
                             <img class="author-avatar absolute -bottom-5 right-6 h-10 w-10 rounded-full border-2 border-accent bg-deep object-cover" src="https://randomuser.me/api/portraits/men/15.jpg" alt="Autor">
                         </div>
                         <div class="card-body px-6 pb-8 pt-12">
                             <h3 class="mb-5 text-xl font-bold text-ink">Acerca de este curso</h3>
                             <ul class="course-details mb-8 list-none space-y-4 p-0">
-                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-file text-accent"></i> 79 lecciones</li>
-                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-video text-accent"></i> 8 horas de contenido en video</li>
-                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-graduation-cap text-accent"></i> Ricardo Cuéllar</li>
+                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-file text-accent"></i>{{course.info_course.lessons}} clases</li>
+                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-video text-accent"></i> {{course.info_course.duration}} horas de contenido en video</li>
+                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-graduation-cap text-accent"></i> {{course.info_course.instructor}}</li>
                             </ul>
-                            <a class="btn bnt-primary btn-course mt-2 block w-full rounded-[10px] border border-accent/40 bg-deep px-5 py-4 text-center text-base text-ink no-underline outline-none transition duration-300 ease-smooth hover:border-accent hover:bg-accent hover:text-deep hover:shadow-card-hover focus-visible:ring-2 focus-visible:ring-accent" href="course_lessons.html">Continuar aprendiendo</a>
+                            <a class="btn bnt-primary btn-course mt-2 block w-full rounded-[10px] border border-accent/40 bg-deep px-5 py-4 text-center text-base text-ink no-underline outline-none transition duration-300 ease-smooth hover:border-accent hover:bg-accent hover:text-deep hover:shadow-card-hover focus-visible:ring-2 focus-visible:ring-accent" href="{% url course.course_link %}">Continuar aprendiendo</a>
 
                         </div>
                     </div>

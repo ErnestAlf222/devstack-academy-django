@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Dashboard {% endblock title%}
+
+
+{% block custom_styles %}
+<link rel="stylesheet" href="{% static 'css/tailwind.css' %}?v=2">
+
+{% endblock custom_styles %}
+    
+
+{% block content %} 
+    <div class="layout flex h-screen bg-bg font-sans text-ink antialiased">
+
+        {% include 'includes/sidebar.html' %}
+
+        <!-- Main content -->
+        <div class="main-content flex min-w-0 flex-1 flex-col overflow-y-auto bg-bg bg-glow">
+            <!-- Header -->
+            {% include 'includes/header.html' %}
+
+            <!-- Aquí va el contenido de la página -->
+            <main class="mx-auto w-full max-w-[1280px] flex-1 px-4 py-8 sm:px-6 lg:px-10 lg:py-12">
+                <h1 class="mb-2 bg-gradient-to-r from-ink via-accent to-accent bg-clip-text pb-1 text-3xl font-extrabold leading-tight tracking-tight text-transparent sm:text-4xl lg:text-5xl">¡Hola, Ricardo!</h1>
+                <p class="mt-2 text-muted"></p>
+                <section class="content mt-6 lg:mt-10">
+                    <div class="cards grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <a class="group block min-w-0 rounded-3xl text-ink no-underline outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-accent" href="">
+                            <div class="card relative flex h-full min-h-[160px] items-end overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-surface2 to-surface p-6 shadow-card sm:min-h-[180px] sm:p-8 transition duration-300 ease-smooth animate-rise motion-reduce:animate-none motion-reduce:transition-none group-hover:-translate-y-1.5 group-hover:border-accent group-hover:shadow-card-hover group-focus-visible:-translate-y-1.5 group-focus-visible:border-accent group-focus-visible:shadow-card-hover before:pointer-events-none before:absolute before:-right-12 before:-top-12 before:h-40 before:w-40 before:rounded-full before:bg-accent/15 before:blur-2xl before:transition before:duration-500 before:ease-smooth group-hover:before:scale-125 group-hover:before:bg-accent/40 group-focus-visible:before:bg-accent/40 after:pointer-events-none after:absolute after:inset-y-6 after:left-0 after:w-1 after:rounded-r-full after:bg-gradient-to-b after:from-accent after:to-deep after:opacity-60 after:transition-opacity after:duration-300 group-hover:after:opacity-100 group-focus-visible:after:opacity-100 [animation-delay:.05s]">
+                                <h3 class="relative z-10 text-xl font-bold leading-snug text-ink transition-colors duration-300 group-hover:text-accent group-focus-visible:text-accent sm:text-2xl">Continuar viendo</h3>
+                            </div>
+                        </a>
+                        <a class="group block min-w-0 rounded-3xl text-ink no-underline outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-accent" href="">
+                            <div class="card relative flex h-full min-h-[160px] items-end overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-surface2 to-surface p-6 shadow-card sm:min-h-[180px] sm:p-8 transition duration-300 ease-smooth animate-rise motion-reduce:animate-none motion-reduce:transition-none group-hover:-translate-y-1.5 group-hover:border-accent group-hover:shadow-card-hover group-focus-visible:-translate-y-1.5 group-focus-visible:border-accent group-focus-visible:shadow-card-hover before:pointer-events-none before:absolute before:-right-12 before:-top-12 before:h-40 before:w-40 before:rounded-full before:bg-accent/15 before:blur-2xl before:transition before:duration-500 before:ease-smooth group-hover:before:scale-125 group-hover:before:bg-accent/40 group-focus-visible:before:bg-accent/40 after:pointer-events-none after:absolute after:inset-y-6 after:left-0 after:w-1 after:rounded-r-full after:bg-gradient-to-b after:from-accent after:to-deep after:opacity-60 after:transition-opacity after:duration-300 group-hover:after:opacity-100 group-focus-visible:after:opacity-100 [animation-delay:.15s]">
+                                <h3 class="relative z-10 text-xl font-bold leading-snug text-ink transition-colors duration-300 group-hover:text-accent group-focus-visible:text-accent sm:text-2xl">Cursos </h3>
+                            </div>
+                        </a>
+                        <a class="group block min-w-0 rounded-3xl text-ink no-underline outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-accent" href="">
+                            <div class="card relative flex h-full min-h-[160px] items-end overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-surface2 to-surface p-6 shadow-card sm:min-h-[180px] sm:p-8 transition duration-300 ease-smooth animate-rise motion-reduce:animate-none motion-reduce:transition-none group-hover:-translate-y-1.5 group-hover:border-accent group-hover:shadow-card-hover group-focus-visible:-translate-y-1.5 group-focus-visible:border-accent group-focus-visible:shadow-card-hover before:pointer-events-none before:absolute before:-right-12 before:-top-12 before:h-40 before:w-40 before:rounded-full before:bg-accent/15 before:blur-2xl before:transition before:duration-500 before:ease-smooth group-hover:before:scale-125 group-hover:before:bg-accent/40 group-focus-visible:before:bg-accent/40 after:pointer-events-none after:absolute after:inset-y-6 after:left-0 after:w-1 after:rounded-r-full after:bg-gradient-to-b after:from-accent after:to-deep after:opacity-60 after:transition-opacity after:duration-300 group-hover:after:opacity-100 group-focus-visible:after:opacity-100 [animation-delay:.25s]">
+                                <h3 class="relative z-10 text-xl font-bold leading-snug text-ink transition-colors duration-300 group-hover:text-accent group-focus-visible:text-accent sm:text-2xl">Perfil</h3>
+                            </div>
+                        </a>
+
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+    
+
+    {% block custom_scripts %}
+    <script src="{% static 'js/script.js' %}"></script>
+        
+    {% endblock custom_scripts %}

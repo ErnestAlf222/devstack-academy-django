@@ -59,8 +59,65 @@ def course_list(request):
 
 
 def course_detail(request):
-    return render(request, 'courses/course_detail.html')
+    course = {
+        'course_title': 'Django Aplicaciones',
+        'course_link': 'course_lessons',
+        'course_image': 'images/curso_2.jpg',
+        'info_course': {
+            'lessons': 79,
+            'duration': 8,
+            'instructor': 'Ernesto Alfonso'
+
+        },
+        'course_content': [
+            {
+                'id': 1,
+                'name': 'Introduccion al curso',
+                'lessons': [
+                    {
+                        'name': '¿Qué aprenderas en el curso?',
+                        'type': 'video'
+                    },
+                    {
+                        'name': '¿Cómo usar la plataforma?',
+                        'type': 'article'
+                    }
+                ]
+
+            }
+        ]
+    }
+    return render(request, 'courses/course_detail.html', {
+        'course': course
+    })
 
 
 def course_lessons(request):
-    pass
+    lesson = {
+        'course_title': 'Django Aplicaciones',
+        'course_progess': 30,
+        'course_link': 'course_lessons',
+        'course_image': 'images/curso_2.jpg',
+        'course_content': [
+            {
+                'id': 1,
+                'name': 'Introduccion al curso',
+                'total_lessons': 8,
+                'complete_lessons': 3,
+                'lessons': [
+                        {
+                            'name': '¿Qué aprenderas en el curso?',
+                            'type': 'video'
+                        },
+                    {
+                            'name': '¿Cómo usar la plataforma?',
+                            'type': 'article'
+                        }
+                ]
+
+            }
+        ]
+    }
+    return render(request, 'courses/course_lesson.html', {
+        'lesson': lesson
+    })
