@@ -6,49 +6,49 @@
 {% block title %} Todos los cursos {% endblock title %}
 
 {% block custom_styles %}
-<link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+<link rel="stylesheet" href="{% static 'css/tailwind.css' %}?v=5">
 {% endblock custom_styles %}
 
 
 
 {% block content %}
-    <div class="layout flex h-screen bg-bg font-sans text-ink antialiased">
+    <div class="layout ui-app">
 
         {% include 'includes/sidebar.html' %}
 
 
         <!-- Main content -->
-        <div class="main-content flex min-w-0 flex-1 flex-col overflow-y-auto bg-bg bg-glow">
+        <div class="main-content ui-main">
             <!-- Header -->
             {% include 'includes/header.html' %}
             
             <!-- Aquí va el contenido de la página -->
-            <main class="flex-1 px-4 py-8 md:px-10">
+            <main class="ui-page">
                 <!-- === COURSE CARDS === -->
 
-                <div class="carousel-wrapper -mx-4 snap-x snap-mandatory overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:overflow-visible md:px-0 md:pb-0">
+                <div class="carousel-wrapper">
                     <div class="course-grid">
-                        <div class="course-grid flex w-max gap-4 md:grid md:w-auto md:grid-cols-[repeat(auto-fill,minmax(290px,1fr))] md:gap-8">
+                        <div class="course-grid grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 xl:grid-cols-3 xl:gap-8">
                             
 
                             
                             {% for course in courses %}
-                                <div class="course-card group relative w-[min(82vw,300px)] shrink-0 snap-center overflow-hidden rounded-[18px] border border-accent/15 bg-gradient-to-br from-surface2 to-surface shadow-card transition duration-300 ease-smooth animate-rise [animation-delay:.05s] motion-reduce:animate-none hover:-translate-y-2 hover:border-accent/55 hover:shadow-card-hover focus-within:-translate-y-2 focus-within:border-accent/55 focus-within:shadow-card-hover md:w-auto">
-                                    <a class="flex h-full flex-col rounded-[18px] text-ink no-underline outline-none before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:z-10 before:h-[190px] before:bg-gradient-to-b before:from-transparent before:from-55% before:to-surface/90 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent" href="{% url 'course_detail'%}">
-                                        <img src="{% static course.course_image%} " alt="Course Image" class="course-img h-[190px] w-full object-cover transition duration-700 ease-smooth group-hover:scale-110 motion-reduce:transition-none" />
-                                        <div class="course-info flex flex-1 flex-col gap-1.5 px-5 pb-5 pt-4">
-                                            <div class="course-rating flex items-center justify-between pb-1">
-                                                <span class="tag beginner inline-block rounded-full border border-emerald-300/40 bg-emerald-300/15 px-3 py-1 text-[.72rem] font-bold uppercase tracking-wider text-emerald-200">{{course.level}}</span>
-                                                <div class="course-meta text-sm font-semibold text-ink">
-                                                    <span><i class="fa-solid fa-star text-star drop-shadow-[0_0_4px_rgba(245,196,81,.45)]"></i> {{course.rating}}</span>
+                                <div class="course-card ui-card ui-card-hover group relative animate-rise p-3 [animation-delay:.05s] motion-reduce:animate-none">
+                                    <a class="flex h-full flex-col rounded-2xl text-ink no-underline outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary" href="{% url 'course_detail'%}">
+                                        <img src="{% static course.course_image%} " alt="Course Image" class="course-img ui-zoom aspect-[16/10] w-full bg-surface2 object-cover" />
+                                        <div class="course-info flex flex-1 flex-col gap-2 px-2 pb-2 pt-5">
+                                            <div class="course-rating pointer-events-none absolute inset-x-6 top-6 z-[1] flex items-center justify-between">
+                                                <span class="tag beginner ui-chip ui-glass uppercase text-mint-ink">{{course.level}}</span>
+                                                <div class="course-meta ui-glass rounded-full px-2.5 py-1 text-sm font-semibold text-ink">
+                                                    <span><i class="fa-solid fa-star text-star"></i> {{course.rating}}</span>
                                                 </div>
                                             </div>
 
-                                            <h3 class="course-title mb-2.5 line-clamp-3 text-[1.08rem] font-bold leading-snug text-ink transition-colors group-hover:text-accent">
+                                            <h3 class="course-title mb-3 line-clamp-2 min-h-[3.1rem] text-lg font-bold leading-snug tracking-tight text-ink transition-colors duration-200 group-hover:text-primary-strong">
                                                 {{course.course_title}}
                                             </h3>
-                                            <div class="author mt-auto flex items-center gap-3 border-t border-accent/15 pt-3.5"><img class="h-[38px] w-[38px] rounded-full border-2 border-accent bg-deep object-cover transition duration-300 ease-smooth group-hover:-rotate-6 group-hover:scale-110" src="{{course.instructor_image}}"
-                                                    alt=""><span class="text-sm font-medium text-muted">{{course.instructor}}</span></div>
+                                            <div class="author ui-arrow mt-auto flex items-center gap-3 border-t border-line pt-4"><img class="h-10 w-10 rounded-full bg-surface2 object-cover ring-2 ring-primary-soft" src="{{course.instructor_image}}"
+                                                    alt=""><span class="text-sm font-semibold text-ink">{{course.instructor}}</span></div>
                                         </div>
 
                                     </a>

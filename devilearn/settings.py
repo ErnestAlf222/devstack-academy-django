@@ -128,3 +128,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Se usa el modelo de usuario personalizado definido en apps/profiles/models/user.py
+AUTH_USER_MODEL = 'profiles.User'

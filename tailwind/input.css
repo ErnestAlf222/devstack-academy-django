@@ -1,3 +1,453 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ==========================================================================
+   DEVILEARN · Sistema de diseño "Paper & Blue" (v2, dashboard educativo claro)
+   --------------------------------------------------------------------------
+   - Tokens de color y sombras: variables CSS en :root (abajo). Los nombres de
+     utilidad (bg-surface, text-ink, ...) se declaran en tailwind.config.js.
+   - Tema CLARO único por defecto. Las variables oscuras existen SOLO bajo
+     :root[data-theme="dark"] (no se activa en ningún sitio todavía).
+   - Componentes reutilizables: prefijo .ui-*  (abajo, en @layer components).
+   - Las clases semánticas del HTML (.layout, .sidebar, .accordion-*, ...) se
+     conservan tal cual: los .ui-* solo se SUMAN a ellas.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    color-scheme: light;
+
+    /* Colores como canales "R G B" para poder usar opacidad (bg-primary/15) */
+    --c-bg: 245 247 251;            /* #f5f7fb fondo de página */
+    --c-surface: 255 255 255;       /* tarjetas, sidebar, header */
+    --c-surface2: 245 247 251;      /* campos y hover sutil */
+    --c-line: 238 241 246;          /* #eef1f6 borde de tarjetas */
+    --c-line-strong: 221 227 238;   /* borde de inputs / botones ghost */
+    --c-ink: 22 27 38;              /* 16:1 sobre blanco */
+    --c-muted: 86 96 116;           /* 6.3:1 sobre blanco (AA) */
+    --c-primary: 26 115 232;        /* #1a73e8 azul Google */
+    --c-primary-strong: 13 87 194;  /* texto azul sobre tintes (AA) */
+    --c-primary-soft: 232 240 254;  /* #e8f0fe */
+    --c-primary-tint: 210 227 252;  /* #d2e3fc */
+    --c-on-primary: 255 255 255;    /* 4.6:1 sobre primary (AA) */
+    --c-mint: 14 159 125;
+    --c-mint-ink: 7 112 90;         /* 5.3:1 sobre mint-soft (AA) */
+    --c-mint-soft: 227 246 239;
+    --c-amber-soft: 254 243 214;
+    --c-amber-ink: 133 77 0;        /* 6:1 sobre amber-soft (AA) */
+    --c-star: 251 188 4;
+
+    /* Sombras difusas de 2 capas, tintadas de azul grisáceo */
+    --shadow-card: 0 1px 2px rgb(31 56 99 / .04), 0 10px 28px -8px rgb(31 56 99 / .10);
+    --shadow-hover: 0 2px 4px rgb(31 56 99 / .05), 0 18px 40px -10px rgb(31 56 99 / .18);
+    --shadow-pop: 0 2px 6px rgb(31 56 99 / .06), 0 20px 44px -12px rgb(31 56 99 / .22);
+  }
+
+  /* Variables oscuras: NO se activan automáticamente. Para probarlas basta
+     añadir data-theme="dark" al <html> (no se hace en ningún template). */
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+
+    --c-bg: 15 18 24;
+    --c-surface: 23 27 35;
+    --c-surface2: 31 36 46;
+    --c-line: 38 44 57;
+    --c-line-strong: 52 60 76;
+    --c-ink: 232 234 240;
+    --c-muted: 160 168 184;
+    --c-primary: 138 180 248;
+    --c-primary-strong: 160 196 252;
+    --c-primary-soft: 28 44 72;
+    --c-primary-tint: 40 62 100;
+    --c-on-primary: 8 24 52;
+    --c-mint: 94 214 180;
+    --c-mint-ink: 120 224 194;
+    --c-mint-soft: 17 52 44;
+    --c-amber-soft: 60 44 10;
+    --c-amber-ink: 252 211 120;
+    --c-star: 251 188 4;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / .3), 0 4px 12px rgb(0 0 0 / .22);
+    --shadow-hover: 0 2px 4px rgb(0 0 0 / .35), 0 10px 24px rgb(0 0 0 / .3),
+      0 24px 48px -16px rgb(0 0 0 / .45);
+    --shadow-pop: 0 2px 4px rgb(0 0 0 / .4), 0 16px 32px rgb(0 0 0 / .4);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+    min-height: 100vh;
+  }
+
+  /* Foco visible global, claro y accesible */
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-primary));
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: rgb(var(--c-primary) / 0.25);
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     LAYOUT
+     ------------------------------------------------------------------ */
+
+  /* .ui-app · Raíz de las páginas con sidebar: fila a pantalla completa
+     (usa dvh para que la barra del navegador móvil no genere scroll extra). */
+  .ui-app {
+    @apply flex h-screen min-h-screen bg-bg font-sans text-ink antialiased;
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  /* .ui-main · Columna de contenido junto al sidebar (scroll interno). */
+  .ui-main {
+    @apply flex min-w-0 flex-1 flex-col overflow-y-auto bg-bg;
+  }
+
+  /* .ui-page · Contenedor de página: ancho máx. 1280px centrado y padding
+     horizontal consistente (px-4 móvil, px-6 tablet, px-10 escritorio). */
+  .ui-page {
+    @apply mx-auto w-full max-w-[1280px] flex-1 px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12;
+  }
+
+  /* .ui-panel · Panel lateral de la lección (arriba en móvil, a la izquierda
+     en escritorio). */
+  .ui-panel {
+    @apply min-w-0 max-w-full border-b border-line bg-surface p-5 sm:p-6 lg:w-[360px] lg:flex-none lg:overflow-y-auto lg:border-b-0 lg:border-r;
+  }
+  /* Texto suelto que deja el <option> fuera de un <select> en la lección */
+  .ui-panel > option {
+    @apply mb-4 block text-sm text-muted;
+  }
+
+  /* ------------------------------------------------------------------
+     SIDEBAR · riel compacto de 64px en TODOS los tamaños. Con hover o foco
+     de teclado se despliega a 248px SUPERPUESTO al contenido (el margen
+     negativo compensa el ancho, así la página no se reacomoda) y muestra
+     logo completo y textos.
+     ------------------------------------------------------------------ */
+
+  /* .ui-sidebar · Navegación lateral desplegable. */
+  .ui-sidebar {
+    @apply relative z-30 flex w-16 shrink-0 flex-col justify-between overflow-hidden border-r border-line bg-surface px-2 py-4 transition-[width,margin,box-shadow] duration-300 ease-smooth motion-reduce:transition-none;
+  }
+  .ui-sidebar:hover,
+  .ui-sidebar:focus-within {
+    @apply w-[248px] -mr-[184px] shadow-pop;
+  }
+
+  /* .ui-sidebar-logo · Contenedor del logo. Colapsado: ancho justo hasta el
+     icono (el PNG trae el wordmark a la derecha del icono); desplegado: logo
+     completo. */
+  .ui-sidebar-logo {
+    @apply mb-4 flex h-12 w-[38px] items-center overflow-hidden pl-2 sm:w-[42px];
+  }
+  .ui-sidebar:hover .ui-sidebar-logo,
+  .ui-sidebar:focus-within .ui-sidebar-logo {
+    @apply w-full;
+  }
+
+  /* .ui-logo-img · Logo (PNG casi blanco, pensado para fondo oscuro).
+     Tema claro: se oscurece con un filtro. Con el sidebar desplegado en
+     escritorio se amplía un 40 % (solo visualmente, el alto h-8 no cambia)
+     porque el PNG tiene mucho margen transparente. */
+  .ui-logo-img {
+    filter: brightness(0) invert(0.12);
+    transition: transform 0.3s cubic-bezier(0.22, 0.8, 0.3, 1);
+  }
+  :root[data-theme='dark'] .ui-logo-img {
+    filter: invert(0) brightness(1);
+  }
+  @media (min-width: 1024px) {
+    .ui-sidebar:hover .ui-logo-img,
+    .ui-sidebar:focus-within .ui-logo-img {
+      @apply origin-left scale-[1.4];
+    }
+  }
+
+  /* .ui-nav-link · Enlace del menú: objetivo de 48px, hover azul suave. */
+  .ui-nav-link {
+    @apply flex h-12 items-center gap-4 rounded-2xl px-[14px] text-muted outline-none transition-colors duration-200 hover:bg-primary-soft hover:text-primary-strong focus-visible:bg-primary-soft focus-visible:text-primary-strong focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary motion-reduce:transition-none;
+  }
+
+  /* .ui-nav-label · Texto del enlace: solo visible con el sidebar
+     desplegado (hover o foco). */
+  .ui-nav-label {
+    @apply hidden whitespace-nowrap text-[.95rem] font-semibold;
+  }
+  .ui-sidebar:hover .ui-nav-label,
+  .ui-sidebar:focus-within .ui-nav-label {
+    @apply inline;
+  }
+
+  /* ------------------------------------------------------------------
+     HEADER
+     ------------------------------------------------------------------ */
+
+  /* .ui-header · Barra superior blanca, pegajosa, con ligero desenfoque. */
+  .ui-header {
+    @apply sticky top-0 z-10 flex h-[76px] shrink-0 items-center justify-between gap-3 border-b border-line bg-surface/80 px-4 backdrop-blur-md sm:px-6 lg:px-10;
+  }
+
+  /* .ui-search · Buscador grande en píldora blanca; foco azul de 3px. */
+  .ui-search {
+    @apply flex h-12 w-full max-w-[560px] items-center rounded-full border border-line-strong bg-surface px-5 shadow-sm transition-all duration-200 ease-smooth focus-within:max-w-[640px] focus-within:border-primary focus-within:ring-[3px] focus-within:ring-primary/25 motion-reduce:transition-none;
+  }
+
+  /* .ui-search-input · <input> sin borde dentro de .ui-search (16px: evita
+     el zoom automático de iOS). */
+  .ui-search-input {
+    @apply h-full w-full min-w-0 border-none bg-transparent text-base text-ink outline-none placeholder:text-muted;
+  }
+
+  /* .ui-avatar · Foto de usuario circular de 44px con anillo fino azul. */
+  .ui-avatar {
+    @apply h-11 w-11 rounded-full object-cover ring-2 ring-primary/60 ring-offset-2 ring-offset-surface transition duration-200 ease-smooth hover:scale-105 motion-reduce:transition-none;
+  }
+
+  /* ------------------------------------------------------------------
+     TIPOGRAFÍA
+     ------------------------------------------------------------------ */
+
+  /* .ui-title · Título principal de página (h1 simple). */
+  .ui-title {
+    @apply text-3xl font-extrabold leading-tight tracking-tight text-ink sm:text-4xl lg:text-[2.75rem];
+  }
+
+  /* .ui-heading · Título de sección (h2). */
+  .ui-heading {
+    @apply text-2xl font-bold leading-tight tracking-tight text-ink;
+  }
+
+  /* .ui-hero · Banner destacado: se aplica al propio <h1>. Degradado azul
+     sutil, texto blanco y dos círculos translúcidos decorativos (::before y
+     ::after, sin texto) que quedan DETRÁS del texto. */
+  .ui-hero {
+    @apply relative isolate flex min-h-[150px] items-center overflow-hidden rounded-3xl bg-hero p-8 text-3xl font-extrabold leading-tight tracking-tight text-on-primary shadow-card sm:min-h-[170px] sm:text-4xl lg:min-h-[210px] lg:p-12 lg:text-5xl;
+  }
+  .ui-hero::before {
+    content: '';
+    @apply pointer-events-none absolute -right-16 -top-24 -z-10 h-72 w-72 rounded-full bg-white/10;
+  }
+  .ui-hero::after {
+    content: '';
+    @apply pointer-events-none absolute -bottom-28 right-28 -z-10 h-56 w-56 rounded-full bg-white/[.07];
+  }
+
+  /* ------------------------------------------------------------------
+     SUPERFICIES
+     ------------------------------------------------------------------ */
+
+  /* .ui-card · Tarjeta blanca: borde 1px muy suave, radio 24px, sombra difusa. */
+  .ui-card {
+    @apply rounded-3xl border border-line bg-surface shadow-card;
+  }
+
+  /* .ui-card-hover · Se suma a .ui-card en tarjetas clicables: elevación
+     sutil. Respeta prefers-reduced-motion. */
+  .ui-card-hover {
+    @apply transition duration-200 ease-smooth hover:-translate-y-1 hover:shadow-card-hover focus-within:shadow-card-hover motion-reduce:transition-none motion-reduce:hover:translate-y-0;
+  }
+
+  /* .ui-zoom · Imagen con esquinas de 16px que hace zoom suave DENTRO de su
+     marco al pasar el mouse sobre un ancestro .group. Usa object-view-box
+     (Chromium/Safari recientes); si el navegador no lo soporta, usa un
+     scale mínimo. */
+  .ui-zoom {
+    @apply rounded-2xl;
+  }
+  @supports (object-view-box: inset(0)) {
+    .ui-zoom {
+      object-view-box: inset(0%);
+      transition: object-view-box 0.5s cubic-bezier(0.22, 0.8, 0.3, 1);
+    }
+    .group:hover .ui-zoom {
+      object-view-box: inset(6%);
+    }
+  }
+  @supports not (object-view-box: inset(0)) {
+    .ui-zoom {
+      @apply transition-transform duration-500 ease-smooth;
+    }
+    .group:hover .ui-zoom {
+      @apply scale-[1.04];
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ui-zoom {
+      transition: none;
+    }
+    .group:hover .ui-zoom {
+      object-view-box: inset(0%);
+      transform: none;
+    }
+  }
+
+  /* .ui-tiles / .ui-tile · Tarjetas de acceso del dashboard (grid .ui-tiles,
+     cada tile dentro de un enlace con la clase "group"). ::before es el icono
+     en círculo de tinte (glifo de Font Awesome, sin texto) y ::after la
+     flecha. Los colores del icono cambian por posición (1.ª azul, 2.ª menta,
+     3.ª ámbar). */
+  .ui-tiles > :nth-child(1) {
+    --tile-bg: var(--c-primary-soft);
+    --tile-fg: var(--c-primary-strong);
+    --tile-icon: '\f144'; /* circle-play */
+  }
+  .ui-tiles > :nth-child(2) {
+    --tile-bg: var(--c-mint-soft);
+    --tile-fg: var(--c-mint-ink);
+    --tile-icon: '\f518'; /* book-open */
+  }
+  .ui-tiles > :nth-child(3) {
+    --tile-bg: var(--c-amber-soft);
+    --tile-fg: var(--c-amber-ink);
+    --tile-icon: '\f007'; /* user */
+  }
+  .ui-tile {
+    @apply relative flex h-full min-h-[170px] flex-col justify-end overflow-hidden rounded-3xl border border-line bg-surface p-6 shadow-card transition duration-200 ease-smooth sm:min-h-[200px] sm:p-8 motion-reduce:transition-none;
+  }
+  .ui-tile::before {
+    content: var(--tile-icon, '\f144');
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free', sans-serif;
+    font-weight: 900;
+    background: rgb(var(--tile-bg, var(--c-primary-soft)));
+    color: rgb(var(--tile-fg, var(--c-primary-strong)));
+    @apply pointer-events-none absolute left-6 top-6 flex h-12 w-12 items-center justify-center rounded-full text-xl sm:left-8 sm:top-8;
+  }
+  .ui-tile::after {
+    content: '→';
+    @apply pointer-events-none absolute right-6 top-6 flex h-9 w-9 items-center justify-center rounded-full bg-surface2 text-base font-semibold text-muted transition duration-200 ease-smooth sm:right-8 sm:top-8 motion-reduce:transition-none;
+  }
+  .group:hover .ui-tile,
+  .group:focus-visible .ui-tile {
+    @apply -translate-y-1 shadow-card-hover motion-reduce:translate-y-0;
+  }
+  .group:hover .ui-tile::after,
+  .group:focus-visible .ui-tile::after {
+    @apply translate-x-0.5 bg-primary text-on-primary;
+  }
+
+  /* .ui-glass · Píldora "vidrio" translúcida con desenfoque: sirve para
+     chips y datos que flotan sobre una imagen. */
+  .ui-glass {
+    @apply bg-white/90 shadow-sm backdrop-blur-sm;
+  }
+
+  /* .ui-arrow · Añade una flecha en círculo al final de una fila flex
+     (::after). Se resalta cuando un ancestro .group recibe hover. */
+  .ui-arrow::after {
+    content: '→';
+    @apply ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-base font-semibold text-primary-strong transition duration-200 ease-smooth motion-reduce:transition-none;
+  }
+  .group:hover .ui-arrow::after {
+    @apply translate-x-0.5 bg-primary text-on-primary;
+  }
+
+  /* ------------------------------------------------------------------
+     BOTONES
+     ------------------------------------------------------------------ */
+
+  /* .ui-btn · Base de botón (también para <a> y <label>): píldora, 44px
+     mínimo táctil, transición suave y "press" con active:scale. */
+  .ui-btn {
+    @apply inline-flex min-h-11 cursor-pointer select-none items-center justify-center gap-2 rounded-full px-6 py-2.5 text-[.95rem] font-semibold no-underline outline-none transition duration-200 ease-smooth active:scale-[.98] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg motion-reduce:transition-none motion-reduce:active:scale-100;
+  }
+
+  /* .ui-btn-primary · Acción principal: relleno azul, texto blanco (AA). */
+  .ui-btn-primary {
+    @apply bg-primary text-on-primary shadow-card hover:shadow-card-hover hover:brightness-[.93];
+  }
+
+  /* .ui-btn-ghost · Acción secundaria: fondo blanco y borde fino. */
+  .ui-btn-ghost {
+    @apply border border-line-strong bg-surface text-ink hover:border-primary/40 hover:bg-primary-soft hover:text-primary-strong;
+  }
+
+  /* ------------------------------------------------------------------
+     FORMULARIOS
+     ------------------------------------------------------------------ */
+
+  /* .ui-label · Etiqueta de campo. */
+  .ui-label {
+    @apply mb-1.5 text-sm font-semibold text-muted;
+  }
+
+  /* .ui-input · <input> y <select>: fondo gris azulado, 48px de alto, 16px
+     de fuente, borde fino y foco azul de 3px. Los <select> reciben flecha. */
+  .ui-input {
+    @apply min-h-12 w-full rounded-2xl border border-line-strong bg-bg px-4 py-3 text-base text-ink outline-none transition duration-200 ease-smooth placeholder:text-muted/70 hover:border-muted/50 focus:border-primary focus:bg-surface focus:ring-[3px] focus:ring-primary/20 motion-reduce:transition-none;
+  }
+  select.ui-input {
+    @apply appearance-none bg-no-repeat pr-11;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236b7385' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8l5 5 5-5'/%3E%3C/svg%3E");
+    background-position: right 1rem center;
+    background-size: 1.1rem;
+  }
+
+  /* ------------------------------------------------------------------
+     CHIPS
+     ------------------------------------------------------------------ */
+
+  /* .ui-chip · Etiqueta compacta en píldora (se combina con una variante). */
+  .ui-chip {
+    @apply inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold tracking-wide;
+  }
+  /* .ui-chip-mint · Estado / nivel / progreso (menta). */
+  .ui-chip-mint {
+    @apply bg-mint-soft text-mint-ink;
+  }
+  /* .ui-chip-primary · Etiqueta informativa (azul suave). */
+  .ui-chip-primary {
+    @apply bg-primary-soft text-primary-strong;
+  }
+  /* .ui-chip-amber · Aviso o destacado (ámbar suave). */
+  .ui-chip-amber {
+    @apply bg-amber-soft text-amber-ink;
+  }
+
+  /* ------------------------------------------------------------------
+     ACORDEÓN
+     El JS (script.js / multimedia.js) alterna la clase "active" en
+     .accordion-item al hacer clic en .accordion-header. Todo el estado
+     abierto depende de ".accordion-item.active": no renombrar esas clases.
+     ------------------------------------------------------------------ */
+
+  /* .ui-acc · Contenedor del acordeón (se combina con .ui-card). */
+  .ui-acc {
+    @apply flex flex-col overflow-hidden px-4 py-1 sm:px-6;
+  }
+  /* .ui-acc-item · Cada sección, separada por una línea fina. */
+  .ui-acc-item {
+    @apply border-b border-line last:border-b-0;
+  }
+  /* .ui-acc-header · Botón de sección con chevron dibujado en CSS. */
+  .ui-acc-header {
+    @apply flex min-h-12 w-full cursor-pointer items-center justify-between gap-4 rounded-xl border-none bg-transparent px-1 py-4 text-left text-base font-semibold text-ink outline-none transition-colors duration-200 hover:text-primary-strong focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary motion-reduce:transition-none;
+  }
+  .ui-acc-header::after {
+    content: '';
+    @apply mb-1 h-2 w-2 shrink-0 rotate-45 border-b-2 border-r-2 border-muted transition-transform duration-200 ease-smooth motion-reduce:transition-none;
+  }
+  /* .ui-acc-body · Contenido plegable (max-height animado). */
+  .ui-acc-body {
+    @apply max-h-0 overflow-hidden px-1 transition-[max-height] duration-300 ease-smooth motion-reduce:transition-none;
+  }
+  /* Estado abierto: lo marca el JS con .accordion-item.active */
+  .accordion-item.active > .ui-acc-header {
+    @apply text-primary-strong;
+  }
+  .accordion-item.active > .ui-acc-header::after {
+    @apply mb-0 rotate-[225deg] border-primary;
+  }
+  .accordion-item.active > .ui-acc-body {
+    @apply max-h-[640px];
+  }
+}

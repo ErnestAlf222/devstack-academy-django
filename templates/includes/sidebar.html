@@ -1,26 +1,26 @@
 {% load static %}
 
-<div class="sidebar group/side flex w-14 shrink-0 flex-col justify-between overflow-hidden border-r border-accent/15 bg-side-fade py-4 transition-[width] duration-300 ease-smooth hover:w-48 focus-within:w-48">
+<div class="sidebar ui-sidebar">
             <div>
-                <div class="logo mb-8 px-4">
-                    <img class="h-[35px] w-[170px] max-w-none" src="{%static 'images/devilearn.png' %}" alt="Logo">
+                <div class="logo ui-sidebar-logo">
+                    <img class="ui-logo-img h-7 w-auto max-w-none sm:h-8" src="{%static 'images/devilearn.png' %}" alt="Logo">
                 </div>
-                <ul class="menu">
-                    <li><a class="menu-option flex items-center gap-4 border-l-[3px] border-transparent px-[13px] py-4 text-muted outline-none transition hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:border-accent focus-visible:bg-accent/10 focus-visible:text-ink" href="{% url 'dashboard' %}"><i
-                                class="fa-solid fa-house icon w-5 text-center text-xl"></i><span class="hidden whitespace-nowrap group-hover/side:inline group-focus-within/side:inline">Dashboard</span></a>
+                <ul class="menu space-y-1">
+                    <li><a class="menu-option ui-nav-link" href="{% url 'dashboard' %}"><i
+                                class="fa-solid fa-house icon w-5 shrink-0 text-center text-lg"></i><span class="ui-nav-label">Dashboard</span></a>
                     </li>
-                    <li><a class="menu-option flex items-center gap-4 border-l-[3px] border-transparent px-[13px] py-4 text-muted outline-none transition hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:border-accent focus-visible:bg-accent/10 focus-visible:text-ink" href="{% url 'course_list' %}"><i
-                                class="fa-solid fa-chalkboard-user icon w-5 text-center text-xl"></i><span class="hidden whitespace-nowrap group-hover/side:inline group-focus-within/side:inline">Cursos</span></a></li>
+                    <li><a class="menu-option ui-nav-link" href="{% url 'course_list' %}"><i
+                                class="fa-solid fa-chalkboard-user icon w-5 shrink-0 text-center text-lg"></i><span class="ui-nav-label">Cursos</span></a></li>
 
 
                 </ul>
             </div>
-            <ul class="bottom-menu">
-                <li><a class="menu-option flex items-center gap-4 border-l-[3px] border-transparent px-[13px] py-4 text-muted outline-none transition hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:border-accent focus-visible:bg-accent/10 focus-visible:text-ink" href="{% url 'profiles' %}"><i class="fa-solid fa-user icon w-5 text-center text-xl"></i><span class="hidden whitespace-nowrap group-hover/side:inline group-focus-within/side:inline">Perfil</span></a>
+            <ul class="bottom-menu space-y-1">
+                <li><a class="menu-option ui-nav-link" href="{% url 'profiles' %}"><i class="fa-solid fa-user icon w-5 shrink-0 text-center text-lg"></i><span class="ui-nav-label">Perfil</span></a>
                 </li>
-                <li><a class="menu-option flex items-center gap-4 border-l-[3px] border-transparent px-[13px] py-4 text-muted outline-none transition hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:border-accent focus-visible:bg-accent/10 focus-visible:text-ink" href="#"><i class="fa-solid fa-question icon w-5 text-center text-xl"></i><span class="hidden whitespace-nowrap group-hover/side:inline group-focus-within/side:inline">Soporte</span></a>
+                <li><a class="menu-option ui-nav-link" href="#"><i class="fa-solid fa-question icon w-5 shrink-0 text-center text-lg"></i><span class="ui-nav-label">Soporte</span></a>
                 </li>
-                <li><a class="menu-option flex items-center gap-4 border-l-[3px] border-transparent px-[13px] py-4 text-muted outline-none transition hover:border-accent hover:bg-accent/10 hover:text-ink focus-visible:border-accent focus-visible:bg-accent/10 focus-visible:text-ink" href="#"><i class="fa-solid fa-gear icon w-5 text-center text-xl"></i><span class="hidden whitespace-nowrap group-hover/side:inline group-focus-within/side:inline">Configuración</span></a>
+                <li><a class="menu-option ui-nav-link" href="#"><i class="fa-solid fa-gear icon w-5 shrink-0 text-center text-lg"></i><span class="ui-nav-label">Configuración</span></a>
                 </li>
             </ul>
 </div>
