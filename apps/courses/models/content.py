@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from ..fields import OrderField
 
 # Modelo base para los elementos que tienen un propietario.
 
@@ -48,3 +49,5 @@ class Content(models.Model):
                                      'model__in': ['text', 'file', 'image', 'video']})
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
+    # Campo que determina el orden de los contenidos dentro de un módulo.
+    order = OrderField(blank=True, for_fields=['module'])

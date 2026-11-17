@@ -13,6 +13,10 @@ class Course(models.Model):
     created_at = models.DateField(auto_now_add=True)
     categories = models.ManyToManyField(
         Category, through='CourseCategory', related_name='courses')
+    image = models.URLField()
+    level = models.CharField(max_length=50)
+    rating = models.FloatField(default=0.0)
+    duration = models.FloatField(default=0.0)
 
     # Representación en cadena del curso
     class Meta:
@@ -30,9 +34,11 @@ class CourseCategory(models.Model):
         Course, on_delete=models.CASCADE)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE)
+    # Campo que determina el orden de las relaciones curso-categoría dentro de un curso.
 
     class Meta:
         unique_together = ('course', 'category')
+    # Representación en cadena de la relación curso-categoría
 
     def __str__(self):
         return f"{self.course} - {self.category}"

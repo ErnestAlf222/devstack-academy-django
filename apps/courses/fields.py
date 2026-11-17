@@ -18,6 +18,7 @@ class OrderField(models.PositiveIntegerField):
                 # Filtrar el queryset por los campos especificados en for_fields.
                 qs = self.model.objects.all()
                 if self.for_fields:
+                    # Construir un diccionario de filtros basado en los campos especificados en for_fields.
                     query = {
                         field: getattr(model_instance, field)
                         for field in self.for_fields
@@ -29,7 +30,7 @@ class OrderField(models.PositiveIntegerField):
                     value = getattr(last_item, self.attname) + 1
                 except ObjectDoesNotExist:
                     value = 0
-
+                # Asignar el valor calculado al campo del modelo.
                 setattr(model_instance, self.attname, value)
 
             except ObjectDoesNotExist:
