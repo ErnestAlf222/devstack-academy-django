@@ -7,6 +7,7 @@ class InstructorProfile(models.Model):
         # Se usa el modelo de usuario personalizado definido en settings.AUTH_USER_MODEL
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        related_name='instructor_profile'
     )
     # Campos del perfil del instructor
     bio = models.TextField(blank=True)

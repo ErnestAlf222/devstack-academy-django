@@ -6,7 +6,7 @@
 {% block title %} Todos los cursos {% endblock title %}
 
 {% block custom_styles %}
-<link rel="stylesheet" href="{% static 'css/tailwind.css' %}?v=5">
+<link rel="stylesheet" href="{% static 'css/tailwind.css' %}?v=6">
 {% endblock custom_styles %}
 
 
@@ -32,10 +32,10 @@
                             
 
                             
-                            {% for course in courses %}
+                            {% for course in course_obj %}
                                 <div class="course-card ui-card ui-card-hover group relative animate-rise p-3 [animation-delay:.05s] motion-reduce:animate-none">
-                                    <a class="flex h-full flex-col rounded-2xl text-ink no-underline outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary" href="{% url 'course_detail'%}">
-                                        <img src="{% static course.course_image%} " alt="Course Image" class="course-img ui-zoom aspect-[16/10] w-full bg-surface2 object-cover" />
+                                    <a class="flex h-full flex-col rounded-2xl text-ink no-underline outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary" href="{% url 'course_detail'  slug=course.slug %}">
+                                        <img src="{% if course.image %}{{ course.image }}{% else %}{% static 'images/curso_1.jpg' %}{% endif %}" onerror="this.onerror=null;this.src='{% static 'images/curso_1.jpg' %}';" alt="{{ course.title }}" class="course-img ui-zoom aspect-[16/10] w-full bg-surface2 object-cover" />
                                         <div class="course-info flex flex-1 flex-col gap-2 px-2 pb-2 pt-5">
                                             <div class="course-rating pointer-events-none absolute inset-x-6 top-6 z-[1] flex items-center justify-between">
                                                 <span class="tag beginner ui-chip ui-glass uppercase text-mint-ink">{{course.level}}</span>
@@ -45,10 +45,10 @@
                                             </div>
 
                                             <h3 class="course-title mb-3 line-clamp-2 min-h-[3.1rem] text-lg font-bold leading-snug tracking-tight text-ink transition-colors duration-200 group-hover:text-primary-strong">
-                                                {{course.course_title}}
+                                                {{course.title}}
                                             </h3>
-                                            <div class="author ui-arrow mt-auto flex items-center gap-3 border-t border-line pt-4"><img class="h-10 w-10 rounded-full bg-surface2 object-cover ring-2 ring-primary-soft" src="{{course.instructor_image}}"
-                                                    alt=""><span class="text-sm font-semibold text-ink">{{course.instructor}}</span></div>
+                                            <div class="author ui-arrow mt-auto flex items-center gap-3 border-t border-line pt-4"><img class="h-10 w-10 rounded-full bg-surface2 object-cover ring-2 ring-primary-soft" src="{% if course.owner.instructor_profile.photo %}{{ course.owner.instructor_profile.photo }}{% else %}{% static 'images/default-avatar.svg' %}{% endif %}" onerror="this.onerror=null;this.src='{% static 'images/default-avatar.svg' %}';"
+                                                    alt=""><span class="text-sm font-semibold text-ink">{{ course.owner.get_full_name }}</span></div>
                                         </div>
 
                                     </a>
@@ -60,6 +60,22 @@
                         </div>
                     </div>
                 </div>
+
+                    <nav class="paginator mt-10 mb-8 px-4 flex flex-wrap items-center justify-center gap-2 text-sm font-semibold" aria-label="Paginación">
+                        {% if course_obj.has_previous %}
+                            <a class="rounded-full border border-line bg-surface px-4 py-2 text-ink no-underline transition-colors duration-200 hover:bg-primary-soft hover:text-primary-strong focus-visible:ring-2 focus-visible:ring-primary motion-reduce:transition-none" href="?page=1{% if query_string %}&{{ query_string }}{% endif %}">Primera</a>
+                            <a class="rounded-full border border-line bg-surface px-4 py-2 text-ink no-underline transition-colors duration-200 hover:bg-primary-soft hover:text-primary-strong focus-visible:ring-2 focus-visible:ring-primary motion-reduce:transition-none" href="?page={{ course_obj.previous_page_number }}{% if query_string %}&{{ query_string }}{% endif %}">Anterior</a>
+                        {% endif %}
+
+                        <span class="rounded-full bg-primary-soft px-4 py-2 text-primary-strong">
+                            Página {{ course_obj.number }} de {{ course_obj.paginator.num_pages }}
+                        </span>
+
+                        {% if course_obj.has_next %}
+                            <a class="rounded-full border border-line bg-surface px-4 py-2 text-ink no-underline transition-colors duration-200 hover:bg-primary-soft hover:text-primary-strong focus-visible:ring-2 focus-visible:ring-primary motion-reduce:transition-none" href="?page={{ course_obj.next_page_number }}{% if query_string %}&{{ query_string }}{% endif %}">Siguiente</a>
+                            <a class="rounded-full border border-line bg-surface px-4 py-2 text-ink no-underline transition-colors duration-200 hover:bg-primary-soft hover:text-primary-strong focus-visible:ring-2 focus-visible:ring-primary motion-reduce:transition-none" href="?page={{ course_obj.paginator.num_pages }}{% if query_string %}&{{ query_string }}{% endif %}">Última</a>
+                        {% endif %}
+                    </nav>
 
             </main>
         </div>

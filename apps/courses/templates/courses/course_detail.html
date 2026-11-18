@@ -31,23 +31,27 @@
                         <h2 class="ui-heading mb-6 sm:text-3xl">Contenido del curso</h2>
                         <div class="accordion ui-card ui-acc">
                             
-                            {% for section in course.course_content %}
+                            {% for module in modules %}
                                 <div class="accordion-item ui-acc-item">
-                                    <button class="accordion-header ui-acc-header">Sección {{section.id}}: {{section.name}}</button>
+                                    <button class="accordion-header ui-acc-header">Sección {{ forloop.counter }}: {{ module.title }}</button>
                                     <div class="accordion-content ui-acc-body">
                                         <ul class="mb-4 mt-1 list-none space-y-1 text-[.95rem] text-muted">
                                             
-                                            {% for lesson in section.lessons %}
-                                                <li class="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-surface2 hover:text-ink"><i class="fa-solid {% if lesson.type == 'video' %} fa-video {%else%} fa-file {%endif%} w-5 shrink-0 text-center text-primary"></i>{{lesson.name}}</li>
+                                            {% for content in module.contents.all %}
+                                                <li class="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-surface2 hover:text-ink"><i class="fa-solid {% if content.content_type.model == 'video' %}fa-video{% elif content.content_type.model == 'image' %}fa-image{% elif content.content_type.model == 'text' %}fa-align-left{% else %}fa-file{% endif %} w-5 shrink-0 text-center text-primary"></i>{{ content.item.title }}</li>
                                             
+                                            {% empty %}
+                                                <li class="px-3 py-3">Sin contenido aún.</li>
                                             {% endfor %}
-                                                
+
                                         </ul>
                                     </div>
                                 </div>
                             
+                            {% empty %}
+                                <p class="px-5 py-6 text-muted">Este curso aún no tiene contenido.</p>
                             {% endfor %}
-                                
+
                             <!-- Agrega más secciones similares -->
                         </div>
                     </div>
@@ -55,18 +59,18 @@
                     <!-- Card lateral -->
                     <div class="course-info-card ui-card w-full animate-rise overflow-hidden [animation-delay:.1s] motion-reduce:animate-none xl:sticky xl:top-28 xl:w-[380px] xl:shrink-0">
                         <div class="card-banner relative p-3">
-                            <div class="tag ui-chip ui-chip-primary absolute left-6 top-6 z-10">{devilearn}</div>
-                            <img class="h-[180px] w-full rounded-2xl bg-surface2 object-cover" src="{%static course.course_image %}" alt="Curso Django" />
-                            <img class="author-avatar absolute -bottom-4 right-8 h-11 w-11 rounded-full border-2 border-surface bg-surface2 object-cover shadow-card" src="https://randomuser.me/api/portraits/men/15.jpg" alt="Autor">
+                            <img class="h-[180px] w-full rounded-2xl bg-surface2 object-cover" src="{% if course.image %}{{ course.image }}{% else %}https://placehold.co/600x200/1e1e1e/ffffff?text={{ course.title|urlencode }}{% endif %}" onerror="this.onerror=null;this.src='https://placehold.co/600x200/1e1e1e/ffffff?text={{ course.title|urlencode }}';" alt="{{ course.title }}" />
+                            <img class="author-avatar absolute rounded-full border-2 border-surface bg-surface2 object-cover shadow-card" style="width:64px;height:64px;bottom:14px;right:14px" src="{% if course.owner.instructor_profile.photo %}{{ course.owner.instructor_profile.photo }}{% else %}{% static 'images/default-avatar.svg' %}{% endif %}" onerror="this.onerror=null;this.src='{% static 'images/default-avatar.svg' %}';" alt="{{ course.owner.get_full_name }}">
                         </div>
                         <div class="card-body px-5 pb-6 pt-9">
+                            <h1>{{course.title}}</h1>
                             <h3 class="mb-4 text-xl font-bold tracking-tight text-ink">Acerca de este curso</h3>
                             <ul class="course-details mb-7 list-none space-y-3.5 p-0">
-                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-file w-5 shrink-0 text-center text-primary"></i>{{course.info_course.lessons}} clases</li>
-                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-video w-5 shrink-0 text-center text-primary"></i> {{course.info_course.duration}} horas de contenido en video</li>
-                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-graduation-cap w-5 shrink-0 text-center text-primary"></i> {{course.info_course.instructor}}</li>
+                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-file w-5 shrink-0 text-center text-primary"></i>{{ total_contents }} contenidos</li>
+                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-video w-5 shrink-0 text-center text-primary"></i> {{ course.duration }} horas de contenido en video</li>
+                                <li class="flex items-center gap-3 text-[.95rem] text-muted"><i class="fa-solid fa-graduation-cap w-5 shrink-0 text-center text-primary"></i> {{ course.owner.get_full_name }}</li>
                             </ul>
-                            <a class="btn bnt-primary btn-course ui-btn ui-btn-primary mt-2 w-full px-4" href="{% url course.course_link %}">Continuar aprendiendo</a>
+                            <a class="btn bnt-primary btn-course ui-btn ui-btn-primary mt-2 w-full px-4" href="{% url 'course_lessons' slug=course.slug %}">Continuar aprendiendo</a>
 
                         </div>
                     </div>

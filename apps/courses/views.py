@@ -1,123 +1,61 @@
 from django.http import HttpResponse
-from django.shortcuts import render
-
+from django.shortcuts import render, get_object_or_404
+from .models import Course
+from django.db.models import Q
+from django.core.paginator import Paginator
 # Create your views here.
 
 
 def course_list(request):
-    courses = [
-        {
-            'id': 1,
-            'level': 'Principiante',
-            'rating': 4.4,
-            'course_title': 'Python fundamentos hasta los detalles',
-            'instructor': 'Ernesto Alfonso',
-            'course_image': 'images/curso_1.jpg',
-            'instructor_image': 'https://randomuser.me/api/portraits/women/68.jpg'
-        },
-        {
-            'id': 2,
-            'level': 'Intermedio',
-            'rating': 4.7,
-            'course_title': 'Desarrollo Web con Django y SQLite',
-            'instructor': 'Mariana Silva',
-            'course_image': 'images/curso_2.jpg',
-            'instructor_image': 'https://randomuser.me/api/portraits/women/68.jpg'
-        },
-        {
-            'id': 3,
-            'level': 'Avanzado',
-            'rating': 4.9,
-            'course_title': 'Ciencia de Datos y Machine Learning con Pandas',
-            'instructor': 'Carlos Mendoza',
-            'course_image': 'images/curso_3.jpg',
-            'instructor_image': 'https://randomuser.me/api/portraits/women/68.jpg'
-        },
-        {
-            'id': 4,
-            'level': 'Principiante',
-            'rating': 4.5,
-            'course_title': 'Automatización de Tareas y Scripts en Python',
-            'instructor': 'Beatriz Gómez',
-            'course_image': 'images/curso_4.jpg',
-            'instructor_image': 'https://randomuser.me/api/portraits/women/68.jpg'
-        },
-        {
-            'id': 5,
-            'level': 'Intermedio',
-            'rating': 4.6,
-            'course_title': 'Creación de APIs RESTful con FastAPI',
-            'instructor': 'Alejandro Ríos',
-            'course_image': 'images/curso_5.jpg',
-            'instructor_image': 'https://randomuser.me/api/portraits/women/68.jpg'
-        }
-    ]
+    # Traemos todos los cursos de la base de datos
+    courses = Course.objects.all()
+    query = request.GET.get('q')
+    if query:
+        # Filtramos los cursos por título o por nombre del instructor (primer nombre o apellido) que contengan la cadena de búsqueda
+        courses = courses.filter(
+            Q(title__icontains=query) | Q(owner__first_name__icontains=query) | Q(
+                owner__last_name__icontains=query)
+        )
+    paginator = Paginator(courses, 10)  # Mostramos 10 cursos por página
+    page_number = request.GET.get('page')
+    # Obtenemos la página de cursos correspondiente al número de página solicitado
+    course_obj = paginator.get_page(page_number)
 
+    query_params = request.GET.copy()
+    # Eliminamos el parámetro 'page' de la cadena de consulta para que no se duplique en los enlaces de paginación
+    if 'page' in query_params:
+        query_params.pop('page')
+    query_string = query_params.urlencode()
+
+    # Renderizamos la plantilla 'courses/courses.html' con los cursos y la cadena de búsqueda como contexto
     return render(request, 'courses/courses.html', {
-        'courses': courses
+        'course_obj': course_obj,
+        'query': query,
+        'query_string': query_string
     })
 
 
-def course_detail(request):
-    course = {
-        'course_title': 'Django Aplicaciones',
-        'course_link': 'course_lessons',
-        'course_image': 'images/curso_2.jpg',
-        'info_course': {
-            'lessons': 79,
-            'duration': 8,
-            'instructor': 'Ernesto Alfonso'
+def course_detail(request, slug):
+    # Obtenemos el curso correspondiente al slug proporcionado o devolvemos un error 404 si no existe
+    course = get_object_or_404(Course, slug=slug)
+    modules = course.modules.prefetch_related('contents')
+    # Expresion generadora para contar el número total de contenidos en todos los módulos del curso
+    total_contents = sum(module.contents.count() for module in modules)
 
-        },
-        'course_content': [
-            {
-                'id': 1,
-                'name': 'Introduccion al curso',
-                'lessons': [
-                    {
-                        'name': '¿Qué aprenderas en el curso?',
-                        'type': 'video'
-                    },
-                    {
-                        'name': '¿Cómo usar la plataforma?',
-                        'type': 'article'
-                    }
-                ]
-
-            }
-        ]
-    }
     return render(request, 'courses/course_detail.html', {
-        'course': course
+        'course': course,
+        'modules': modules,
+        'total_contents': total_contents
     })
 
 
-def course_lessons(request):
-    lesson = {
-        'course_title': 'Django Aplicaciones',
-        'course_progess': 30,
-        'course_link': 'course_lessons',
-        'course_image': 'images/curso_2.jpg',
-        'course_content': [
-            {
-                'id': 1,
-                'name': 'Introduccion al curso',
-                'total_lessons': 8,
-                'complete_lessons': 3,
-                'lessons': [
-                        {
-                            'name': '¿Qué aprenderas en el curso?',
-                            'type': 'video'
-                        },
-                    {
-                            'name': '¿Cómo usar la plataforma?',
-                            'type': 'article'
-                        }
-                ]
+def course_lessons(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    course_title = course.title
+    # Obtenemos el primer módulo del curso y su primer contenido (lección)
+    modules = course.modules.prefetch_related('contents')
 
-            }
-        ]
-    }
     return render(request, 'courses/course_lesson.html', {
-        'lesson': lesson
+        'course_title': course_title,
+        'modules': modules
     })
